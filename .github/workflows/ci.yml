@@ -32,12 +32,11 @@ jobs:
         wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
         sudo apt install -y ./google-chrome-stable_current_amd64.deb
 
-    - name: Configurar ChromeDriver
-      run: |
-        CHROME_VERSION=$(google-chrome --version | awk '{ print $3 }' | cut -d'.' -f1)
-        wget https://chromedriver.storage.googleapis.com/$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)/chromedriver_linux64.zip
-        unzip chromedriver_linux64.zip
-        sudo mv chromedriver /usr/local/bin/
+    - name: Configurar ChromeDriver v138
+      run: |        
+        wget https://storage.googleapis.com/chrome-for-testing-public/138.0.7204.49/linux64/chromedriver-linux64.zip
+        unzip chromedriver-linux64.zip
+        sudo mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
         sudo chmod +x /usr/local/bin/chromedriver
     - name: Compilar el proyecto
       run: mvn -B package --file pom.xml
@@ -45,6 +44,8 @@ jobs:
     - name: Ejecutar pruebas
       run: mvn test
 
+    - name: Generar reporte de cobertura con JaCoCo
+      run: mvn verify
     - name: Análisis con SonarQube (ngrok)
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
