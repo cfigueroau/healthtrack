@@ -1,0 +1,35 @@
+# Maven
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# Eclipse/IntelliJ/VS Code settings
+.classpath
+.project
+.settings/
+.idea/
+.vscode/
+
+# Archivos de logs
+*.log
+jmeter.log
+
+# Resultados de pruebas o informes
+/results/
+/resultados/
+surefire-reports/
+*.jtl
+*.dump
+*.out
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Otros
+/tests/
