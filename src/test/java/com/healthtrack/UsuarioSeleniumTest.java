@@ -15,19 +15,18 @@ public class UsuarioSeleniumTest {
     public void setUp() {
         ChromeOptions options = new ChromeOptions();
 
-        // Configuración para evitar errores en GitHub Actions
-        options.addArguments("--headless"); // Modo sin interfaz gráfica
-        options.addArguments("--no-sandbox"); // Necesario en CI
-        options.addArguments("--disable-dev-shm-usage"); // Previene uso excesivo de memoria compartida
-        options.addArguments("--disable-gpu"); // En algunos entornos evita errores con GPU
-        options.addArguments("--remote-allow-origins=*"); // Requerido por nuevas versiones de ChromeDriver
-        options.addArguments("--user-data-dir=/tmp/unique-profile"); // Para evitar conflicto de sesiones
+        // Configuración compatible con GitHub Actions
+        options.addArguments("--headless");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--disable-gpu");
+        options.addArguments("--remote-allow-origins=*");
 
         driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
-        // Asegúrate de que el HTML se sirva correctamente
-        driver.get("file://" + System.getProperty("user.dir") + "/src/test/resources/form.html");
+        // URL pública del formulario
+        driver.get("https://luvisoft.cl/demos/modulo4/form.html");
     }
 
     @Test
