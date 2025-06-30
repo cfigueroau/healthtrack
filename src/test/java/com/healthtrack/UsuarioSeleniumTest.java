@@ -1,47 +1,50 @@
 package com.healthtrack;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.junit.jupiter.api.*;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.concurrent.TimeUnit;
 
-class UsuarioSeleniumTest {
+public class UsuarioSeleniumTest {
 
     private WebDriver driver;
 
     @BeforeEach
-    void setUp() {        
-        driver = new ChromeDriver();
+    public void setUp() {
+        ChromeOptions options = new ChromeOptions();
+
+        // Configuración para evitar errores en GitHub Actions
+        options.addArguments("--headless"); // Modo sin interfaz gráfica
+        options.addArguments("--no-sandbox"); // Necesario en CI
+        options.addArguments("--disable-dev-shm-usage"); // Previene uso excesivo de memoria compartida
+        options.addArguments("--disable-gpu"); // En algunos entornos evita errores con GPU
+        options.addArguments("--remote-allow-origins=*"); // Requerido por nuevas versiones de ChromeDriver
+        options.addArguments("--user-data-dir=/tmp/unique-profile"); // Para evitar conflicto de sesiones
+
+        driver = new ChromeDriver(options);
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+        // Asegúrate de que el HTML se sirva correctamente
+        driver.get("file://" + System.getProperty("user.dir") + "/src/test/resources/form.html");
     }
 
     @Test
-    void testActualizarPesoEnFormulario() {        
-        //String rutaArchivo = "file:///" + System.getProperty("user.dir") + "/src/test/resources/form.html";  // Carga el archivo local
-        String rutaArchivo = "https://luvisoft.cl/demos/modulo4/form.html";         // Carga el archivo desde mi server
-        driver.get(rutaArchivo);
+    public void testActualizarPesoEnFormulario() {
+        WebElement pesoInput = driver.findElement(By.id("peso"));
+        pesoInput.clear();
+        pesoInput.sendKeys("80");
 
-        WebElement campoNombre = driver.findElement(By.id("nombre"));
-        WebElement campoPeso = driver.findElement(By.id("peso"));
-        WebElement botonActualizar = driver.findElement(By.tagName("button"));
-
-        campoNombre.sendKeys("Claudio");
-        campoPeso.sendKeys("78.3");
+        WebElement botonActualizar = driver.findElement(By.id("btnActualizar"));
         botonActualizar.click();
 
-        // Verificar el resultado
-        WebElement resultado = driver.findElement(By.id("resultado"));
-        String texto = resultado.getText();
-        assertTrue(texto.contains("Claudio") && texto.contains("78.3"), 
-            "El texto mostrado no es correcto: " + texto);
+        WebElement mensaje = driver.findElement(By.id("mensaje"));
+        Assertions.assertEquals("Peso actualizado a 80 kg.", mensaje.getText());
     }
 
     @AfterEach
-    void tearDown() {
+    public void tearDown() {
         if (driver != null) {
             driver.quit();
         }
