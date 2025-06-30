@@ -1,0 +1,42 @@
+name: CI HealthTrack
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clonar repositorio
+      uses: actions/checkout@v3
+
+    - name: Configurar JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Instalar dependencias y ejecutar pruebas
+      run: mvn clean test
+
+    - name: Analizar con SonarQube
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      with:
+        args: >
+          -Dsonar.projectKey=healthtrack
+          -Dsonar.projectName=healthtrack
+          -Dsonar.sources=src/main/java
+          -Dsonar.tests=src/test/java
+          -Dsonar.java.binaries=target
+          -Dsonar.host.url=http://localhost:9000
+    
+    - name: SonarQube Scan
+      run: mvn sonar:sonar -Dsonar.projectKey=HealthTrack \
+                       -Dsonar.host.url=https://295e-179-60-66-122.ngrok-free.app \
+                       -Dsonar.login=${{ secrets.SONAR_TOKEN }}

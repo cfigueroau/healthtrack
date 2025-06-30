@@ -1,0 +1,34 @@
+{
+  "Total" : {
+    "transaction" : "Total",
+    "sampleCount" : 500,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 16.887999999999995,
+    "medianResTime" : 9.0,
+    "minResTime" : 7.0,
+    "maxResTime" : 556.0,
+    "pct1ResTime" : 30.900000000000034,
+    "pct2ResTime" : 39.94999999999999,
+    "pct3ResTime" : 289.41000000000054,
+    "throughput" : 102.7326895418122,
+    "receivedKBytesPerSec" : 133.2314567495377,
+    "sentKBytesPerSec" : 13.74451022190261
+  },
+  "Carga Formulario Peso" : {
+    "transaction" : "Carga Formulario Peso",
+    "sampleCount" : 500,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 16.887999999999995,
+    "medianResTime" : 9.0,
+    "minResTime" : 7.0,
+    "maxResTime" : 556.0,
+    "pct1ResTime" : 30.900000000000034,
+    "pct2ResTime" : 39.94999999999999,
+    "pct3ResTime" : 289.41000000000054,
+    "throughput" : 102.7326895418122,
+    "receivedKBytesPerSec" : 133.2314567495377,
+    "sentKBytesPerSec" : 13.74451022190261
+  }
+}

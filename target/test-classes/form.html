@@ -1,0 +1,31 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Actualización de Peso</title>
+</head>
+<body>
+    <h2>Formulario de Actualización de Peso</h2>
+    <form id="formulario">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre"><br><br>
+
+        <label for="peso">Peso:</label>
+        <input type="number" id="peso" name="peso"><br><br>
+
+        <button type="button" onclick="actualizarPeso()">Actualizar</button>
+    </form>
+
+    <p id="resultado"></p>
+
+    <script>
+        function actualizarPeso() {
+            const nombre = document.getElementById("nombre").value;
+            const peso = document.getElementById("peso").value;
+            document.getElementById("resultado").innerText = 
+                `Usuario: ${nombre}, Peso Actual: ${peso} kg`;
+        }
+    </script>
+</body>
+</html>
