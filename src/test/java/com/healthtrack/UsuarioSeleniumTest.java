@@ -31,7 +31,6 @@ class UsuarioSeleniumTest {
         //options.addArguments("--headless", "--no-sandbox", "--disable-dev-shm-usage");
         //driver = new ChromeDriver(options);
 
-
     }
 
     @Test
