@@ -1,57 +1,50 @@
-name: CI
+name: CI con Maven, Selenium y SonarQube
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
-  build:
-    name: Compilación, Pruebas y Análisis SonarQube
+  build-and-test:
     runs-on: ubuntu-latest
 
-
     steps:
-    - name: Instalar ChromeDriver
-      run: sudo apt-get install -y chromium-chromedriver
+      - name: Checkout del código
+        uses: actions/checkout@v3
 
-    - name: Checkout del código
-      uses: actions/checkout@v3
+      - name: Instalar JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
-    - name: Configuración de Java
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'temurin'
-        java-version: '17'
-      
-    - name: Instalar Chrome
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y wget unzip xvfb
-        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-        sudo apt install -y ./google-chrome-stable_current_amd64.deb
+      - name: Instalar Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget unzip xvfb
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt install -y ./google-chrome-stable_current_amd64.deb
 
-    - name: Configurar ChromeDriver v138
-      run: |        
-        wget https://storage.googleapis.com/chrome-for-testing-public/138.0.7204.49/linux64/chromedriver-linux64.zip
-        unzip chromedriver-linux64.zip
-        sudo mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
-        sudo chmod +x /usr/local/bin/chromedriver
-    - name: Compilar el proyecto
-      run: mvn -B package --file pom.xml
+      - name: Instalar ChromeDriver 138
+        run: |
+          wget https://storage.googleapis.com/chrome-for-testing-public/138.0.7204.49/linux64/chromedriver-linux64.zip
+          unzip chromedriver-linux64.zip
+          sudo mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
+          sudo chmod +x /usr/local/bin/chromedriver
+          chromedriver --version
 
-    - name: Ejecutar pruebas
-      run: mvn test
+      - name: Ejecutar pruebas con Selenium
+        run: |
+          sudo apt-get install -y xvfb
+          xvfb-run mvn test
 
-    - name: Generar reporte de cobertura con JaCoCo
-      run: mvn verify
-    - name: Análisis con SonarQube (ngrok)
-      env:
+      - name: Análisis con SonarQube (ngrok)
+        env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: mvn sonar:sonar \
-          -Dsonar.projectKey=healthtrack \
-          -Dsonar.host.url=https://295e-179-60-66-122.ngrok-free.app \
-          -Dsonar.login=$SONAR_TOKEN
-
-
+        run: |
+          mvn sonar:sonar \
+            -Dsonar.projectKey=healthtrack \
+            -Dsonar.host.url=https://295e-179-60-66-122.ngrok-free.app \
+            -Dsonar.login=$SONAR_TOKEN

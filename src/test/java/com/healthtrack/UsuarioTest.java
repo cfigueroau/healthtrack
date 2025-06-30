@@ -43,14 +43,14 @@ class UsuarioTest {
     }
 
     @Test
-    public void testActualizarPesoCero() {
+    void testActualizarPesoCero() {
         Usuario usuario = new Usuario("Ana", 60.0);
         usuario.actualizarPeso(0.0);
         assertEquals(0.0, usuario.getPeso(), 0.001);
     }
 
     @Test
-    public void testActualizarPesoNegativo() {
+    void testActualizarPesoNegativo() {
         Usuario usuario = new Usuario("Carlos", 70.0);
         usuario.actualizarPeso(-5.0);
         assertEquals(-5.0, usuario.getPeso(), 0.001);
